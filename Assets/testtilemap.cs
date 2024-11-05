@@ -27,7 +27,6 @@ public class testtilemap : MonoBehaviour
             }
         }
         DrawTileMap();
-        applyrules();
         
     }
     void DrawTileMap()
@@ -47,42 +46,30 @@ public class testtilemap : MonoBehaviour
             }
         }
     }
-    int countcells(int x, int y)
+    public bool Checkclivecell(int x, int y)
+    {
+        if (x >= 0 && y >= 0 && x < map.GetLength(0) && y < map.GetLength(1))
+        {
+            if (map[x, y] == 1)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public int countcells(int x, int y)
     {
         int count=0;
-        if (0 < x && x > 25)
+        for (int check_x = -1; check_x <= 1; check_x++)
         {
-            if (0 < y && y > 25)
+            for (int check_y = -1; check_y <= 1; check_y++)
             {
-                if (map[x + 1, y] == 1)
+                if (check_y == 0 && check_x == 0)
                 {
-                    count++;
+                    continue;
                 }
-                if (map[x + 1, y + 1] == 1)
-                {
-                    count++;
-                }
-                if (map[x, y + 1] == 1)
-                {
-                    count++;
-                }
-                if (map[x - 1, y + 1] == 1)
-                {
-                    count++;
-                }
-                if (map[x - 1, y] == 1)
-                {
-                    count++;
-                }
-                if (map[x - 1, y - 1] == 1)
-                {
-                    count++;
-                }
-                if (map[x, y - 1] == 1)
-                {
-                    count++;
-                }
-                if (map[x + 1, y - 1] == 1)
+                bool resultisalivecheck = Checkclivecell(x + check_x, y + check_y);
+                if (resultisalivecheck == true)
                 {
                     count++;
                 }
@@ -93,15 +80,17 @@ public class testtilemap : MonoBehaviour
     void applyrules()
     {
         int[,] mapchanges = new int[25, 25];
+        
         for (int y = 0; y < map.GetLength(1); y++)
         {
             for (int x = 0; x < map.GetLength(0); x++)
             {
-                if (countcells(x,y) < 2 && map[x, y] == 1)
+                mapchanges[x, y] = map[x, y];
+                if (countcells(x, y) < 2 && map[x, y] == 1)
                 {
                     mapchanges[x, y] = 0;
                 }
-                if (countcells(x, y) > 3 && map[x,y]==1)
+                if (countcells(x, y) > 3 && map[x, y] == 1)
                 {
                     mapchanges[x, y] = 0;
                 }
@@ -109,14 +98,14 @@ public class testtilemap : MonoBehaviour
                 {
                     mapchanges[x, y] = 1;
                 }
-                if (countcells(x, y) == 2 || countcells(x, y) == 3 && map[x, y] == 1)
+                if ((countcells(x, y) == 2 || countcells(x, y) == 3) && map[x, y] == 1)
                 {
                     mapchanges[x, y] = 1;
                 }
+                
             }
         }
         map = mapchanges;
-        DrawTileMap();
     }
     private void OnGUI()
     {
@@ -126,6 +115,7 @@ public class testtilemap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        applyrules();
+        DrawTileMap();
     }
 }
