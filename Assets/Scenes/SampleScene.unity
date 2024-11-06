@@ -228,7 +228,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -434,7 +434,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myTilemap: {fileID: 1537055573}
   mycam: {fileID: 519420031}
-  livecell: {fileID: 11400000, guid: e40e458f3c9f4bf469673519e5dfbbf6, type: 2}
 --- !u!483693784 &1537055572
 TilemapRenderer:
   m_ObjectHideFlags: 0
