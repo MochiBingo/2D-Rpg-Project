@@ -11,82 +11,107 @@ using UnityEngine.Tilemaps;
 public class testtilemap : MonoBehaviour
 {
     public Tilemap myTilemap;
+    public Tile tree;
+    public Tile sidewalk;
+    public Tile road;
+    public Tile empty;
+    public Tile obstacle;
     public Camera mycam;
-    //public TileBase livecell;
-    public int[,] map = new int[45, 25];
+    bool walkableTile;
+
     void Start()
     {
         mycam = Camera.main;
-        
+        ConvertMapToTilemap(mapinput);
     }
     void Update()
     {
-        Debug.Log(mapString);
-    }
-    bool walkableTile;
-    static string mapinput =
-        @"
-        TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTOOOOOTTTTTTT
-        T                              SSRRRRRSS    T
-        T                              SSRRRRRSS    T
-        T                              SSRRRRRSS    T
-        T                              SSRRRRRSS    T
-        T                              SSRRRRRSS    T
-        T                             SSRRRRRRSS    T
-        T                             SSRRRRRSS     T
-        T                             SSRRRRRSS     T
-        T                             SSRRRRRSS     T
-        TSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSST
-        TSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSST
-        ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO
-        ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO
-        ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO
-        ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO
-        ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO
-        TSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSSSSSSSSST
-        TSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSSSSSSSSST
-        T                      SSRRRRRSS            T
-        T                      SSRRRRRSS            T
-        T                      SSRRRRRRSS           T
-        T                       SSRRRRRSS           T
-        T                       SSRRRRRSS           T
-        TTTTTTTTTTTTTTTTTTTTTTTTTTOOOOOTTTTTTTTTTTTTT
-        ";
-    string[] mapString = mapinput.Select(x => x.ToString()).ToArray();
-    
-    
-    string GenerateMapString(int width, int height)
-    {
-        //legend:
-        //B=building
-        //#=building roof
-        //T=tree
-        //P=plant
-        //S=sidewalk
-        //R=Road
-        //C=car
-        //O=obstacle
-
-        //Rules:
-        //map has a border
-        //car parts must be together
-        //buildings must look like buildings (complete)
-        //cars stay on roads, obstacles stay off roads
-        //nothing in water
-
-
-        return "s";
-    }
-    void ConvertMapToTilemap(string mapData)
-    {
         
-        
-        for (int y=-1; y < map.GetLength(1); y++)
+    }
+
+    private string[] mapinput = new string[]
         {
-            for (int x=-1; x < map.GetLength(0); x++)
-            {
+        
+        "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTOOOOOTTTTTTT",
+        "T                              SSRRRRRSS    T",
+        "T                              SSRRRRRSS    T",
+        "T                              SSRRRRRSS    T",
+        "T                              SSRRRRRSS    T",
+        "T                              SSRRRRRSS    T",
+        "T                             SSRRRRRRSS    T",
+        "T                             SSRRRRRSS     T",
+        "T                             SSRRRRRSS     T",
+        "T                             SSRRRRRSS     T",
+        "TSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSST",
+        "TSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSST",
+        "ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
+        "ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
+        "ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
+        "ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
+        "ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
+        "TSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSSSSSSSSST",
+        "TSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSSSSSSSSST",
+        "T                      SSRRRRRSS            T",
+        "T                      SSRRRRRSS            T",
+        "T                      SSRRRRRRSS           T",
+        "T                       SSRRRRRSS           T",
+        "T                       SSRRRRRSS           T",
+        "TTTTTTTTTTTTTTTTTTTTTTTTTTOOOOOTTTTTTTTTTTTTT"
+        };
+    
+    
+    //string GenerateMapString(int width, int height)
+    //{
+    //    //legend:
+    //    //B=building
+    //    //#=building roof
+    //    //T=tree
+    //    //P=plant
+    //    //S=sidewalk
+    //    //R=Road
+    //    //C=car
+    //    //O=obstacle
 
+    //    //Rules:
+    //    //map has a border
+    //    //car parts must be together
+    //    //buildings must look like buildings (complete)
+    //    //cars stay on roads, obstacles stay off roads
+    //    //nothing in water
+
+        
+    //}
+    void ConvertMapToTilemap(string[] mapData)
+    {
+        for (int y= 0; y < mapinput.Length; y++)
+        {
+            for (int x=0; x < mapinput[y].Length; x++)
+            {
+                char tileChar = mapinput[y][x];
+
+                Tile tileToPlace = GetTileForCharacter(tileChar);
+                Vector3Int position = new Vector3Int(x,-y, 0);
+                myTilemap.SetTile(position, tileToPlace);
             }
+        }
+    }
+    private Tile GetTileForCharacter(char character)
+    {
+        switch (character)
+        {
+            case 'T':
+                return tree;
+            case 'R':
+                return road;
+            case 'S':
+                return sidewalk;
+            case 'O':
+                return obstacle;
+            case ' ':
+                return empty;
+            default:
+                return null;
+
         }
     }
     void LoadPremadeMap(string mapFilePath)
