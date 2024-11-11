@@ -438,6 +438,7 @@ MonoBehaviour:
   road: {fileID: 11400000, guid: 21ae22349b2f1514fa87bf6f5dd3f34d, type: 2}
   empty: {fileID: 11400000, guid: 3227b9ba99601864e8a00668c2d3c4f7, type: 2}
   obstacle: {fileID: 11400000, guid: e9b13ccb525826d4aad4d86c80f4a053, type: 2}
+  tree2: {fileID: 11400000, guid: bda237fde9ae6734e8ec286e02a15359, type: 2}
   mycam: {fileID: 519420031}
 --- !u!483693784 &1537055572
 TilemapRenderer:
