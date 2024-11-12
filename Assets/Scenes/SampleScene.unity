@@ -203,7 +203,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.2509804, g: 0.6117647, b: 0.38431376, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -436,9 +436,12 @@ MonoBehaviour:
   tree: {fileID: 11400000, guid: 470ac3ae1c38e9f47a1099db52d52352, type: 2}
   sidewalk: {fileID: 11400000, guid: fa2ef19c58bf537489c9881a8a0fe8e0, type: 2}
   road: {fileID: 11400000, guid: 21ae22349b2f1514fa87bf6f5dd3f34d, type: 2}
-  empty: {fileID: 11400000, guid: 3227b9ba99601864e8a00668c2d3c4f7, type: 2}
-  obstacle: {fileID: 11400000, guid: e9b13ccb525826d4aad4d86c80f4a053, type: 2}
+  empty: {fileID: 11400000, guid: cdd40d7fe755efb479c9a35a17680c16, type: 2}
+  roadbarrier: {fileID: 11400000, guid: 9103683d46578ab41a376c1628e24b97, type: 2}
   tree2: {fileID: 11400000, guid: bda237fde9ae6734e8ec286e02a15359, type: 2}
+  hotdogcart: {fileID: 11400000, guid: 4683443920816e74a8b072e4361d9644, type: 2}
+  plant: {fileID: 11400000, guid: 4fa7323091ba0be49b7cc99d9d2d1806, type: 2}
+  plant2: {fileID: 11400000, guid: 470ac3ae1c38e9f47a1099db52d52352, type: 2}
   mycam: {fileID: 519420031}
 --- !u!483693784 &1537055572
 TilemapRenderer:
