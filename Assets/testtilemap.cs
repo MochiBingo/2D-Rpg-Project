@@ -16,8 +16,11 @@ public class testtilemap : MonoBehaviour
     public Tile sidewalk;
     public Tile road;
     public Tile empty;
-    public Tile obstacle;
+    public Tile roadbarrier;
     public Tile tree2;
+    public Tile hotdogcart;
+    public Tile plant;
+    public Tile plant2;
     public Camera mycam;
     private System.Random rand = new System.Random();
     
@@ -78,10 +81,16 @@ public class testtilemap : MonoBehaviour
                 {
                     row[x] = 'T';
                 }
+                else if (y == 10)
+                {
+                    row[x] = 'R';
+                }
+
                 else
                 {
                     row[x] = GenerateRandomTile(x, y);
                 }
+                
             }
             mapinput[y] = new string(row);
         }
@@ -94,7 +103,7 @@ public class testtilemap : MonoBehaviour
         //S=sidewalk
         //R=Road
         //C=car
-        //O=road barrier
+        //0=road barrier
 
        //Rules:
         //map has a border
@@ -105,7 +114,19 @@ public class testtilemap : MonoBehaviour
     }
     private char GenerateRandomTile(int x, int y)
     {
-        return ' ';
+        if (rand.Next(1, 1000) <= 50)
+        {
+            return 'O';
+        }
+        else if (rand.Next(1, 1000) <= 100)
+        {
+            return 'P';
+        }
+
+        else
+        {
+            return ' ';
+        }
     }
     void ConvertMapToTilemap(string[] mapData)
     {
@@ -131,6 +152,26 @@ public class testtilemap : MonoBehaviour
             _ => null,
         };
     }
+    private Tile ObstacleSelection()
+    {
+        int randValue = rand.Next(1, 3);
+        return randValue switch
+        {
+            1 => roadbarrier,
+            2 => hotdogcart,
+            _ => null,
+        };
+    }
+    private Tile PlantSelection()
+    {
+        int randValue = rand.Next(1, 3);
+        return randValue switch
+        {
+            1 => plant,
+            2 => plant2,
+            _ => null,
+        };
+    }
     private Tile GetTileForCharacter(char character)
     {
         return character switch
@@ -138,7 +179,8 @@ public class testtilemap : MonoBehaviour
             'T' => TreeSelection(),
             'R' => road,
             'S' => sidewalk,
-            'O' => obstacle,
+            'O' => ObstacleSelection(),
+            'P' => PlantSelection(),
             ' ' => empty,
             _ => null,
         };
