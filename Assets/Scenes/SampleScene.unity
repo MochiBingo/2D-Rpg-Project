@@ -442,7 +442,15 @@ MonoBehaviour:
   hotdogcart: {fileID: 11400000, guid: 4683443920816e74a8b072e4361d9644, type: 2}
   plant: {fileID: 11400000, guid: 4fa7323091ba0be49b7cc99d9d2d1806, type: 2}
   plant2: {fileID: 11400000, guid: 470ac3ae1c38e9f47a1099db52d52352, type: 2}
-  mycam: {fileID: 519420031}
+  WaterTR: {fileID: 11400000, guid: 7c5f3aa07c8739f47ab6e8b8c859f9c0, type: 2}
+  WaterTL: {fileID: 11400000, guid: de10cda511df03644a349bdacff4ed70, type: 2}
+  WaterBR: {fileID: 11400000, guid: d11176b6b9a7e734c8b40787293aa2c5, type: 2}
+  WaterBL: {fileID: 11400000, guid: 7f89094c2562e93459b4283a185333f7, type: 2}
+  WaterLeft: {fileID: 11400000, guid: aeb6943c404b14841adb2f2009eb5194, type: 2}
+  WaterRight: {fileID: 11400000, guid: 4cfb6a40f681de542936a47a3d2348d9, type: 2}
+  WaterTop: {fileID: 11400000, guid: 25f81632b566aac4682b888fda234b81, type: 2}
+  WaterBottom: {fileID: 11400000, guid: 9e662f631be46d64c8e670e2ce5b237a, type: 2}
+  WaterMiddle: {fileID: 11400000, guid: 477586d29018f7d41a3b90a9acf2893a, type: 2}
 --- !u!483693784 &1537055572
 TilemapRenderer:
   m_ObjectHideFlags: 0

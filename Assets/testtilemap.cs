@@ -21,53 +21,27 @@ public class testtilemap : MonoBehaviour
     public Tile hotdogcart;
     public Tile plant;
     public Tile plant2;
-    public Camera mycam;
+    public Tile WaterTR;
+    public Tile WaterTL;
+    public Tile WaterBR;
+    public Tile WaterBL;
+    public Tile WaterLeft;
+    public Tile WaterRight;
+    public Tile WaterTop;
+    public Tile WaterBottom;
+    public Tile WaterMiddle;
     private System.Random rand = new System.Random();
     
     private const int columns = 45;
     private const int rows = 25;
     void Start()
-    {
-        mycam = Camera.main;
-        
+    {   
         ConvertMapToTilemap(GenerateMapString(columns,rows));
     }
     void Update()
     {
         
     }
-
-    //private string[] mapinput = new string[]
-    //{
-
-    //"TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTOOOOOTTTTTTT",
-    //"T                              SSRRRRRSS    T",
-    //"T                              SSRRRRRSS    T",
-    //"T                              SSRRRRRSS    T",
-    //"T                              SSRRRRRSS    T",
-    //"T                              SSRRRRRSS    T",
-    //"T                             SSRRRRRRSS    T",
-    //"T                             SSRRRRRSS     T",
-    //"T                             SSRRRRRSS     T",
-    //"T                             SSRRRRRSS     T",
-    //"TSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSST",
-    //"TSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSST",
-    //"ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
-    //"ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
-    //"ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
-    //"ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
-    //"ORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRO",
-    //"TSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSSSSSSSSST",
-    //"TSSSSSSSSSSSSSSSSSSSSSSSSRRRRRSSSSSSSSSSSSSST",
-    //"T                      SSRRRRRSS            T",
-    //"T                      SSRRRRRSS            T",
-    //"T                      SSRRRRRRSS           T",
-    //"T                       SSRRRRRSS           T",
-    //"T                       SSRRRRRSS           T",
-    //"TTTTTTTTTTTTTTTTTTTTTTTTTTOOOOOTTTTTTTTTTTTTT"
-    //};
-
-
     string[] GenerateMapString(int columns, int rows)
     {
         string[] mapinput=new string[rows];
@@ -81,10 +55,6 @@ public class testtilemap : MonoBehaviour
                 {
                     row[x] = 'T';
                 }
-                else if (y == 10)
-                {
-                    row[x] = 'R';
-                }
 
                 else
                 {
@@ -94,31 +64,111 @@ public class testtilemap : MonoBehaviour
             }
             mapinput[y] = new string(row);
         }
+        PlacePond(mapinput, columns, rows);
+
         return mapinput;
         //legend:
-        //B=building
-        //#=building roof
-        //T=tree
-        //P=plant
-        //S=sidewalk
-        //R=Road
-        //C=car
-        //0=road barrier
+        //T=tree (random)
+        //P=plant (random)
+        //O=obstacle (random)
+        //W=water (not in yet)
+        //R=paths (not in yet)
 
-       //Rules:
-        //map has a border
-        //car parts must be together
-        //buildings must look like buildings (complete)
-        //cars stay on roads, obstacles stay off roads
-        //nothing in water 
+        //Rules:
+        //map has a border (ONE)
+        //always a pond
+        //keep things off the paths
+    }
+    void PlacePond(string[] mapData, int columns, int rows)
+    {
+        int pondWidth = rand.Next(5, 10);
+        int pondHeight = rand.Next(3, 8);
+
+        int pondX = rand.Next(1, columns - pondWidth - 1);
+        int pondY = rand.Next(1, rows - pondHeight - 1);
+
+        for (int y = pondY; y < pondY + pondHeight; y++)
+        {
+            char[] row = mapData[y].ToCharArray();
+            for (int x = pondX; x < pondX + pondWidth; x++)
+            {
+                row[x] = 'W';
+            }
+            mapData[y] = new string(row);
+        }
+        for (int x = pondX - 1; x < pondX + pondWidth + 1; x++)
+        {
+            if (pondY - 1 >= 0)
+            {
+                char[] topRow = mapData[pondY - 1].ToCharArray();
+                if (x == pondX - 1)
+                {
+                    topRow[x] = '+';
+                }
+                else if (x == pondX + pondWidth)
+                {
+                    topRow[x] = '=';
+                }
+                else
+                {
+                    topRow[x] = '~';
+                }
+                mapData[pondY - 1] = new string(topRow);
+            }
+            if (pondY + pondHeight < rows)
+            {
+                char[] bottomRow = mapData[pondY + pondHeight].ToCharArray();
+                if (x == pondX - 1)
+                {
+                    bottomRow[x] = '-';
+                }
+                else if (x == pondX + pondWidth)
+                {
+                    bottomRow[x] = '!';
+                }
+                else
+                {
+                    bottomRow[x] = '_';
+                }
+                mapData[pondY + pondHeight] = new string(bottomRow);
+            }
+            for (int y = pondY - 1; y < pondY + pondHeight + 1; y++)
+            {
+                // Left edge
+                if (pondX - 1 >= 0)
+                {
+                    char[] leftRow = mapData[y].ToCharArray();
+                    if (y == pondY - 1)
+                        leftRow[pondX - 1] = '+'; // Top-left corner
+                    else if (y == pondY + pondHeight)
+                        leftRow[pondX - 1] = '-'; // Bottom-left corner
+                    else
+                        leftRow[pondX - 1] = '['; // Left edge
+                    mapData[y] = new string(leftRow);
+                }
+
+                // Right edge
+                if (pondX + pondWidth < columns)
+                {
+                    char[] rightRow = mapData[y].ToCharArray();
+                    if (y == pondY - 1)
+                        rightRow[pondX + pondWidth] = '='; // Top-right corner
+                    else if (y == pondY + pondHeight)
+                        rightRow[pondX + pondWidth] = '!'; // Bottom-right corner
+                    else
+                        rightRow[pondX + pondWidth] = ']'; // Right edge
+                    mapData[y] = new string(rightRow);
+                }
+            }
+        }
     }
     private char GenerateRandomTile(int x, int y)
     {
-        if (rand.Next(1, 1000) <= 50)
+        if (rand.Next(1, 1000) <= 25)
         {
             return 'O';
         }
-        else if (rand.Next(1, 1000) <= 100)
+        else if (rand.Next(1, 1000) <= 50)
         {
             return 'P';
         }
@@ -141,6 +191,29 @@ public class testtilemap : MonoBehaviour
                 myTilemap.SetTile(position, tileToPlace);
             }
         }
+    }
+
+    private Tile GetTileForCharacter(char character)
+    {
+        return character switch
+        {
+            'T' => TreeSelection(),
+            'R' => road,
+            'S' => sidewalk,
+            'O' => ObstacleSelection(),
+            'P' => PlantSelection(),
+            'W' => WaterMiddle,
+            '+' => WaterTL,
+            '~' => WaterTop,
+            '=' => WaterTR,
+            '[' => WaterLeft,
+            ']' => WaterRight,
+            '-' => WaterBL,
+            '_' => WaterBottom,
+            '!' => WaterBR,
+            ' ' => empty,
+            _ => null,
+        };
     }
     private Tile TreeSelection()
     {
@@ -172,29 +245,10 @@ public class testtilemap : MonoBehaviour
             _ => null,
         };
     }
-    private Tile GetTileForCharacter(char character)
-    {
-        return character switch
-        {
-            'T' => TreeSelection(),
-            'R' => road,
-            'S' => sidewalk,
-            'O' => ObstacleSelection(),
-            'P' => PlantSelection(),
-            ' ' => empty,
-            _ => null,
-        };
-    }
     void LoadPremadeMap(string mapFilePath)
     {
 
 
         //ConvertMapToTilemap();
-    }
-    
-    private void OnGUI()
-    {
-        Vector3 mouseworldposition = mycam.ScreenToWorldPoint(Input.mousePosition);
-        GUI.Label(new Rect(50, 50, 400, 30), $"Mouse: {Input.mousePosition} In cell Space: {myTilemap.WorldToCell(mouseworldposition)}");
     }
 }
