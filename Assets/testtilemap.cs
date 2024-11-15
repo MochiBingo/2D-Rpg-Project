@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using Unity.Mathematics;
@@ -15,8 +16,6 @@ public class testtilemap : MonoBehaviour
 {
     public Tilemap myTilemap;
     public Tile tree;
-    public Tile sidewalk;
-    public Tile road;
     public Tile empty;
     public Tile roadbarrier;
     public Tile tree2;
@@ -36,14 +35,67 @@ public class testtilemap : MonoBehaviour
     private System.Random rand = new System.Random();
     private const int columns = 45;
     private const int rows = 25;
+    string filePath = @"E:\map-project-premade-map.txt";
+    private int playerX = 1;
+    private int playerY = 1;
+    private string[] mapData;
     void Start()
-    {   
-        ConvertMapToTilemap(GenerateMapString(columns,rows));
+    {
+        mapData = GenerateMapString(columns, rows);
+        ConvertMapToTilemap(mapData);
+        //LoadPremadeMap(filePath);
+        UpdatePlayerTile();
     }
     void Update()
     {
-     
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            TryMovePlayer(0, -1);
+        }
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            TryMovePlayer(0, 1);
+        }
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            TryMovePlayer(-1, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            TryMovePlayer(1, 0);
+        }
     }
+    void TryMovePlayer(int dx, int dy)
+    {
+        int newX = playerX + dx;
+        int newY = playerY + dy;
+
+        if (IsPositionValid(newX, newY))
+        {
+            Vector3Int oldPosition = new Vector3Int(playerX, -playerY, 0);
+            myTilemap.SetTile(oldPosition, GetTileForCharacter(mapData[playerY][playerX]));
+
+            playerX = newX;
+            playerY = newY;
+            UpdatePlayerTile();
+        }
+    }
+    void UpdatePlayerTile()
+    {
+        Vector3Int position = new Vector3Int(playerX, -playerY, 0);
+        myTilemap.SetTile(position, Player);
+    }
+    bool IsPositionValid(int x, int y)
+    {
+        if (x < 0 || x >= columns || y < 0 || y >= rows)
+        {
+            return false;
+        }
+        char tileAtPositon = mapData[y][x];
+        return tileAtPositon != 'O' && tileAtPositon != 'W' && tileAtPositon != 'H' && tileAtPositon != 'P' && tileAtPositon != 'T' && tileAtPositon != '+' && tileAtPositon != '~' && tileAtPositon != '=' && tileAtPositon != '[' && tileAtPositon != ']' && tileAtPositon != '_' && tileAtPositon != '-' && tileAtPositon != '!';
+    }
+
+    private int hotdogcarts = 0;
     string[] GenerateMapString(int columns, int rows)
     {
         string[] mapinput=new string[rows];
@@ -170,15 +222,20 @@ public class testtilemap : MonoBehaviour
         {
             return 'P';
         }
-        else if (rand.Next(1, 1000) <= 50)
+        else if (hotdogcarts < 10 && rand.Next(1, 1000) <= 50)
+        {
+            hotdogcarts++;
+            return 'H';
+        }
+        else if (rand.Next(1, 1000) >= 990)
         {
             return 'O';
         }
-
         else
         {
             return ' ';
         }
+        
     }
     void ConvertMapToTilemap(string[] mapData)
     {
@@ -188,6 +245,10 @@ public class testtilemap : MonoBehaviour
             {
                 char tileChar = mapData[y][x];
 
+                if (x == playerX && y == playerY)
+                {
+                    continue;
+                }
                 Tile tileToPlace = GetTileForCharacter(tileChar);
                 Vector3Int position = new Vector3Int(x,-y, 0);
                 myTilemap.SetTile(position, tileToPlace);
@@ -201,7 +262,8 @@ public class testtilemap : MonoBehaviour
         {
             'T' => TreeSelection(),
             'p' => Player,
-            'O' => ObstacleSelection(),
+            'H' => hotdogcart,
+            'O' => roadbarrier,
             'P' => PlantSelection(),
             'W' => WaterMiddle,
             '+' => WaterTL,
@@ -226,16 +288,6 @@ public class testtilemap : MonoBehaviour
             _ => null,
         };
     }
-    private Tile ObstacleSelection()
-    {
-        int randValue = rand.Next(1, 3);
-        return randValue switch
-        {
-            1 => roadbarrier,
-            2 => hotdogcart,
-            _ => null,
-        };
-    }
     private Tile PlantSelection()
     {
         int randValue = rand.Next(1, 3);
@@ -248,8 +300,8 @@ public class testtilemap : MonoBehaviour
     }
     void LoadPremadeMap(string mapFilePath)
     {
-
-
-        //ConvertMapToTilemap();
+        string readText = File.ReadAllText(mapFilePath);
+        string[] premadeMap = readText.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        ConvertMapToTilemap(premadeMap);
     }
 }
