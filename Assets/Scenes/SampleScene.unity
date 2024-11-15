@@ -434,8 +434,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myTilemap: {fileID: 1537055573}
   tree: {fileID: 11400000, guid: 470ac3ae1c38e9f47a1099db52d52352, type: 2}
-  sidewalk: {fileID: 11400000, guid: fa2ef19c58bf537489c9881a8a0fe8e0, type: 2}
-  road: {fileID: 11400000, guid: 21ae22349b2f1514fa87bf6f5dd3f34d, type: 2}
   empty: {fileID: 11400000, guid: cdd40d7fe755efb479c9a35a17680c16, type: 2}
   roadbarrier: {fileID: 11400000, guid: 9103683d46578ab41a376c1628e24b97, type: 2}
   tree2: {fileID: 11400000, guid: bda237fde9ae6734e8ec286e02a15359, type: 2}
@@ -451,7 +449,7 @@ MonoBehaviour:
   WaterTop: {fileID: 11400000, guid: 25f81632b566aac4682b888fda234b81, type: 2}
   WaterBottom: {fileID: 11400000, guid: 9e662f631be46d64c8e670e2ce5b237a, type: 2}
   WaterMiddle: {fileID: 11400000, guid: 477586d29018f7d41a3b90a9acf2893a, type: 2}
-  Player: {fileID: 0}
+  Player: {fileID: 11400000, guid: a95e2fdd5a6c10b4bb3ef01e957663db, type: 2}
 --- !u!483693784 &1537055572
 TilemapRenderer:
   m_ObjectHideFlags: 0
