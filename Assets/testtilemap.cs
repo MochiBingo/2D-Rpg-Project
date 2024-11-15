@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
@@ -30,8 +32,8 @@ public class testtilemap : MonoBehaviour
     public Tile WaterTop;
     public Tile WaterBottom;
     public Tile WaterMiddle;
+    public Tile Player;
     private System.Random rand = new System.Random();
-    
     private const int columns = 45;
     private const int rows = 25;
     void Start()
@@ -40,7 +42,7 @@ public class testtilemap : MonoBehaviour
     }
     void Update()
     {
-        
+     
     }
     string[] GenerateMapString(int columns, int rows)
     {
@@ -71,13 +73,13 @@ public class testtilemap : MonoBehaviour
         //T=tree (random)
         //P=plant (random)
         //O=obstacle (random)
-        //W=water (not in yet)
+        //W=water
         //R=paths (not in yet)
 
         //Rules:
         //map has a border (ONE)
-        //always a pond
-        //keep things off the paths
+        //Pond always has a proper border (TWO)
+        //never more than 10 hot dog carts (THREE)
     }
     void PlacePond(string[] mapData, int columns, int rows)
     {
@@ -166,11 +168,11 @@ public class testtilemap : MonoBehaviour
     {
         if (rand.Next(1, 1000) <= 25)
         {
-            return 'O';
+            return 'P';
         }
         else if (rand.Next(1, 1000) <= 50)
         {
-            return 'P';
+            return 'O';
         }
 
         else
@@ -192,14 +194,13 @@ public class testtilemap : MonoBehaviour
             }
         }
     }
-
+    
     private Tile GetTileForCharacter(char character)
     {
         return character switch
         {
             'T' => TreeSelection(),
-            'R' => road,
-            'S' => sidewalk,
+            'p' => Player,
             'O' => ObstacleSelection(),
             'P' => PlantSelection(),
             'W' => WaterMiddle,

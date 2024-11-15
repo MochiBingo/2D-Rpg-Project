@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 00000000833c5d1c
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -451,6 +451,7 @@ MonoBehaviour:
   WaterTop: {fileID: 11400000, guid: 25f81632b566aac4682b888fda234b81, type: 2}
   WaterBottom: {fileID: 11400000, guid: 9e662f631be46d64c8e670e2ce5b237a, type: 2}
   WaterMiddle: {fileID: 11400000, guid: 477586d29018f7d41a3b90a9acf2893a, type: 2}
+  Player: {fileID: 0}
 --- !u!483693784 &1537055572
 TilemapRenderer:
   m_ObjectHideFlags: 0
