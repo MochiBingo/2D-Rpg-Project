@@ -14,6 +14,7 @@ using UnityEngine.Tilemaps;
 
 public class testtilemap : MonoBehaviour
 {
+    //variables
     public Tilemap myTilemap;
     public Tile tree;
     public Tile empty;
@@ -39,6 +40,19 @@ public class testtilemap : MonoBehaviour
     private int playerX = 1;
     private int playerY = 1;
     private string[] mapData;
+
+    //Legend:
+    //T=tree (random)
+    //P=plant (random)
+    //O=obstacle (random)
+    //W=water
+
+    //Rules:
+    //map has a border (ONE)
+    //Pond always has a proper border (as long as it was procedural, not premade (TWO)
+    //never more than 10 hot dog carts (THREE)
+
+    //calls the map to be made, and update's the player so you can see where they are
     void Start()
     {
         mapData = GenerateMapString(columns, rows);
@@ -46,6 +60,8 @@ public class testtilemap : MonoBehaviour
         //LoadPremadeMap(filePath);
         UpdatePlayerTile();
     }
+
+    //movement handler
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
@@ -65,6 +81,8 @@ public class testtilemap : MonoBehaviour
             TryMovePlayer(1, 0);
         }
     }
+
+    //resets player off old tile, adds them to new tile
     void TryMovePlayer(int dx, int dy)
     {
         int newX = playerX + dx;
@@ -80,11 +98,15 @@ public class testtilemap : MonoBehaviour
             UpdatePlayerTile();
         }
     }
+
+    //actually makes the player visual go there
     void UpdatePlayerTile()
     {
         Vector3Int position = new Vector3Int(playerX, -playerY, 0);
         myTilemap.SetTile(position, Player);
     }
+
+    //checks if you can move into that position (if it's ground)
     bool IsPositionValid(int x, int y)
     {
         if (x < 0 || x >= columns || y < 0 || y >= rows)
@@ -95,7 +117,10 @@ public class testtilemap : MonoBehaviour
         return tileAtPositon != 'O' && tileAtPositon != 'W' && tileAtPositon != 'H' && tileAtPositon != 'P' && tileAtPositon != 'T' && tileAtPositon != '+' && tileAtPositon != '~' && tileAtPositon != '=' && tileAtPositon != '[' && tileAtPositon != ']' && tileAtPositon != '_' && tileAtPositon != '-' && tileAtPositon != '!';
     }
 
+    //keeps count of how many hot dog carts
     private int hotdogcarts = 0;
+
+    //makes the map, keeping a tree border and making the rest either obstacles, plants, or empty spots
     string[] GenerateMapString(int columns, int rows)
     {
         string[] mapinput=new string[rows];
@@ -121,18 +146,9 @@ public class testtilemap : MonoBehaviour
         PlacePond(mapinput, columns, rows);
 
         return mapinput;
-        //legend:
-        //T=tree (random)
-        //P=plant (random)
-        //O=obstacle (random)
-        //W=water
-        //R=paths (not in yet)
-
-        //Rules:
-        //map has a border (ONE)
-        //Pond always has a proper border (TWO)
-        //never more than 10 hot dog carts (THREE)
     }
+
+    //makes a pond
     void PlacePond(string[] mapData, int columns, int rows)
     {
         int pondWidth = rand.Next(5, 10);
@@ -216,6 +232,8 @@ public class testtilemap : MonoBehaviour
             }
         }
     }
+
+    //chooses whether the space is a plant, obstacle, or empty
     private char GenerateRandomTile(int x, int y)
     {
         if (rand.Next(1, 1000) <= 25)
@@ -237,6 +255,8 @@ public class testtilemap : MonoBehaviour
         }
         
     }
+
+    //makes the characters into their respective tiles
     void ConvertMapToTilemap(string[] mapData)
     {
         for (int y= 0; y < mapData.Length; y++)
@@ -256,6 +276,7 @@ public class testtilemap : MonoBehaviour
         }
     }
     
+    //sorts what tiles are assigned to what characters
     private Tile GetTileForCharacter(char character)
     {
         return character switch
@@ -278,6 +299,8 @@ public class testtilemap : MonoBehaviour
             _ => null,
         };
     }
+
+    //chooses a random tree tile
     private Tile TreeSelection()
     {
         int randValue = rand.Next(1, 3);
@@ -288,6 +311,8 @@ public class testtilemap : MonoBehaviour
             _ => null,
         };
     }
+
+    //chooses a random plant tile
     private Tile PlantSelection()
     {
         int randValue = rand.Next(1, 3);
@@ -298,6 +323,8 @@ public class testtilemap : MonoBehaviour
             _ => null,
         };
     }
+
+    //loads a premade map from a text file
     void LoadPremadeMap(string mapFilePath)
     {
         string readText = File.ReadAllText(mapFilePath);
