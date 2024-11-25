@@ -9,19 +9,14 @@ public class HealthSystem : MonoBehaviour
 {
     public int health;
     public string healthStatus;
-    public int shield;
     public string ShowHUD()
     {
         // Implement HUD display
-        return "Health: " + health + " | Shield: " + shield + " | Status: " + healthStatus;
+        return "Health: " + health + " | Status: " + healthStatus;
     }
     public void TakeDamage(int damage)
     {
-        if (shield > 0)
-        {
-            shield = shield - damage;
-        }
-        else
+        if (health > 0)
         {
             health = health - damage;
             // Implement damage logic
@@ -37,19 +32,6 @@ public class HealthSystem : MonoBehaviour
         if (health < 0)
         {
             health = 0;
-        }
-        if (shield > 100)
-        {
-            shield = 100;
-        }
-        if (shield < 0)
-        {
-            health = health - Math.Abs(shield);
-            if (health < 0)
-            {
-                health = 0;
-            }
-            shield = 0;
         }
         if (health <= 100)
         {

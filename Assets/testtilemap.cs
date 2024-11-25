@@ -33,12 +33,14 @@ public class testtilemap : MonoBehaviour
     public Tile WaterBottom;
     public Tile WaterMiddle;
     public Tile Player;
+    public Tile Enemy;
     private System.Random rand = new System.Random();
     private const int columns = 45;
     private const int rows = 25;
-    string filePath = @"E:\map-project-premade-map.txt";
     private int playerX = 1;
     private int playerY = 1;
+    private int enemyX = 1;
+    private int enemyY = 1;
     private string[] mapData;
 
     //Legend:
@@ -57,7 +59,6 @@ public class testtilemap : MonoBehaviour
     {
         mapData = GenerateMapString(columns, rows);
         ConvertMapToTilemap(mapData);
-        //LoadPremadeMap(filePath);
         UpdatePlayerTile();
     }
 
@@ -322,13 +323,5 @@ public class testtilemap : MonoBehaviour
             2 => plant2,
             _ => null,
         };
-    }
-
-    //loads a premade map from a text file
-    void LoadPremadeMap(string mapFilePath)
-    {
-        string readText = File.ReadAllText(mapFilePath);
-        string[] premadeMap = readText.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
-        ConvertMapToTilemap(premadeMap);
     }
 }
