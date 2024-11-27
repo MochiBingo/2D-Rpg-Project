@@ -1,9 +1,11 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using TMPro;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -11,6 +13,7 @@ using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class testtilemap : MonoBehaviour
 {
@@ -33,15 +36,19 @@ public class testtilemap : MonoBehaviour
     public Tile WaterBottom;
     public Tile WaterMiddle;
     public Tile Player;
-    public Tile Enemy;
+    public Tile finish;
+    public TextMeshProUGUI ui;
     private System.Random rand = new System.Random();
     private const int columns = 45;
     private const int rows = 25;
     private int playerX = 1;
     private int playerY = 1;
-    private int enemyX = 1;
-    private int enemyY = 1;
     private string[] mapData;
+    public GameObject winText;
+    public GameObject dieText;
+    public static GameObject dieTextStat;
+    public Tile enemy;
+
 
     //Legend:
     //T=tree (random)
@@ -55,8 +62,12 @@ public class testtilemap : MonoBehaviour
     //never more than 10 hot dog carts (THREE)
 
     //calls the map to be made, and update's the player so you can see where they are
+
     void Start()
     {
+        moveEnemy.enemy = enemy;
+        HealthSystem.health = 100;
+        HealthSystem.healthStatus = "Perfect Health";
         mapData = GenerateMapString(columns, rows);
         ConvertMapToTilemap(mapData);
         UpdatePlayerTile();
@@ -65,6 +76,8 @@ public class testtilemap : MonoBehaviour
     //movement handler
     void Update()
     {
+        dieTextStat = dieText;
+        ui.text = "Health: " + HealthSystem.health + " | Status: " + HealthSystem.healthStatus;
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             TryMovePlayer(0, -1);
@@ -104,7 +117,12 @@ public class testtilemap : MonoBehaviour
     void UpdatePlayerTile()
     {
         Vector3Int position = new Vector3Int(playerX, -playerY, 0);
+        if (myTilemap.GetTile(position) == finish)
+        {
+            winText.SetActive(true);
+        }
         myTilemap.SetTile(position, Player);
+
     }
 
     //checks if you can move into that position (if it's ground)
@@ -115,7 +133,7 @@ public class testtilemap : MonoBehaviour
             return false;
         }
         char tileAtPositon = mapData[y][x];
-        return tileAtPositon != 'O' && tileAtPositon != 'W' && tileAtPositon != 'H' && tileAtPositon != 'P' && tileAtPositon != 'T' && tileAtPositon != '+' && tileAtPositon != '~' && tileAtPositon != '=' && tileAtPositon != '[' && tileAtPositon != ']' && tileAtPositon != '_' && tileAtPositon != '-' && tileAtPositon != '!';
+        return tileAtPositon != 'O' && tileAtPositon != 'W' && tileAtPositon != 'H' && tileAtPositon != 'P' && tileAtPositon != 'T' && tileAtPositon != '+' && tileAtPositon != '~' && tileAtPositon != '=' && tileAtPositon != '[' && tileAtPositon != ']' && tileAtPositon != '_' && tileAtPositon != '-' && tileAtPositon != '!' && tileAtPositon != 'e';
     }
 
     //keeps count of how many hot dog carts
@@ -124,7 +142,7 @@ public class testtilemap : MonoBehaviour
     //makes the map, keeping a tree border and making the rest either obstacles, plants, or empty spots
     string[] GenerateMapString(int columns, int rows)
     {
-        string[] mapinput=new string[rows];
+        string[] mapinput = new string[rows];
 
         for (int y = 0; y < rows; y++)
         {
@@ -135,12 +153,16 @@ public class testtilemap : MonoBehaviour
                 {
                     row[x] = 'T';
                 }
+                else if (x == columns - 2 && y == rows - 2)
+                {
+                    row[x] = 'F';
+                }
 
                 else
                 {
                     row[x] = GenerateRandomTile(x, y);
                 }
-                
+
             }
             mapinput[y] = new string(row);
         }
@@ -254,15 +276,15 @@ public class testtilemap : MonoBehaviour
         {
             return ' ';
         }
-        
+
     }
 
     //makes the characters into their respective tiles
     void ConvertMapToTilemap(string[] mapData)
     {
-        for (int y= 0; y < mapData.Length; y++)
+        for (int y = 0; y < mapData.Length; y++)
         {
-            for (int x=0; x < mapData[y].Length; x++)
+            for (int x = 0; x < mapData[y].Length; x++)
             {
                 char tileChar = mapData[y][x];
 
@@ -271,12 +293,12 @@ public class testtilemap : MonoBehaviour
                     continue;
                 }
                 Tile tileToPlace = GetTileForCharacter(tileChar);
-                Vector3Int position = new Vector3Int(x,-y, 0);
+                Vector3Int position = new Vector3Int(x, -y, 0);
                 myTilemap.SetTile(position, tileToPlace);
             }
         }
     }
-    
+
     //sorts what tiles are assigned to what characters
     private Tile GetTileForCharacter(char character)
     {
@@ -297,6 +319,8 @@ public class testtilemap : MonoBehaviour
             '_' => WaterBottom,
             '!' => WaterBR,
             ' ' => empty,
+            'e' => enemy,
+            'F' => finish,
             _ => null,
         };
     }
