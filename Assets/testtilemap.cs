@@ -10,6 +10,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.ShaderKeywordFilter;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.Tilemaps;
@@ -18,36 +19,34 @@ using UnityEngine.UIElements;
 public class testtilemap : MonoBehaviour
 {
     //variables
-    public Tilemap myTilemap;
-    public Tile tree;
-    public Tile empty;
-    public Tile roadbarrier;
-    public Tile tree2;
-    public Tile hotdogcart;
-    public Tile plant;
-    public Tile plant2;
-    public Tile WaterTR;
-    public Tile WaterTL;
-    public Tile WaterBR;
-    public Tile WaterBL;
-    public Tile WaterLeft;
-    public Tile WaterRight;
-    public Tile WaterTop;
-    public Tile WaterBottom;
-    public Tile WaterMiddle;
-    public Tile Player;
-    public Tile finish;
+    public static Tilemap myTilemap;
+    public static Tile tree;
+    public static Tile empty;
+    public static Tile roadbarrier;
+    public static Tile tree2;
+    public static Tile hotdogcart;
+    public static Tile plant;
+    public static Tile plant2;
+    public static Tile WaterTR;
+    public static Tile WaterTL;
+    public static Tile WaterBR;
+    public static Tile WaterBL;
+    public static Tile WaterLeft;
+    public static Tile WaterRight;
+    public static Tile WaterTop;
+    public static Tile WaterBottom;
+    public static Tile WaterMiddle;
+    public static Tile Player;
+    public static Tile finish;
     public TextMeshProUGUI ui;
-    private System.Random rand = new System.Random();
-    private const int columns = 45;
-    private const int rows = 25;
-    private int playerX = 1;
-    private int playerY = 1;
+    public static System.Random rand = new System.Random();
+    public static int columns = 45;
+    public static int rows = 25;
+    public static int playerX = 1;
+    public static int playerY = 1;
     private string[] mapData;
     public GameObject winText;
-    public GameObject dieText;
-    public static GameObject dieTextStat;
-    public Tile enemy;
+    public static GameObject dieText;
 
 
     //Legend:
@@ -62,21 +61,20 @@ public class testtilemap : MonoBehaviour
     //never more than 10 hot dog carts (THREE)
 
     //calls the map to be made, and update's the player so you can see where they are
-
-    void Start()
+    public void Start()
     {
-        moveEnemy.enemy = enemy;
         HealthSystem.health = 100;
         HealthSystem.healthStatus = "Perfect Health";
         mapData = GenerateMapString(columns, rows);
         ConvertMapToTilemap(mapData);
         UpdatePlayerTile();
+        moveEnemy.mapData = mapData;
     }
+    
 
     //movement handler
     void Update()
     {
-        dieTextStat = dieText;
         ui.text = "Health: " + HealthSystem.health + " | Status: " + HealthSystem.healthStatus;
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -280,7 +278,7 @@ public class testtilemap : MonoBehaviour
     }
 
     //makes the characters into their respective tiles
-    void ConvertMapToTilemap(string[] mapData)
+    static void ConvertMapToTilemap(string[] mapData)
     {
         for (int y = 0; y < mapData.Length; y++)
         {
@@ -300,7 +298,7 @@ public class testtilemap : MonoBehaviour
     }
 
     //sorts what tiles are assigned to what characters
-    private Tile GetTileForCharacter(char character)
+    public static Tile GetTileForCharacter(char character)
     {
         return character switch
         {
@@ -319,14 +317,14 @@ public class testtilemap : MonoBehaviour
             '_' => WaterBottom,
             '!' => WaterBR,
             ' ' => empty,
-            'e' => enemy,
+            'e' => moveEnemy.enemy,
             'F' => finish,
             _ => null,
         };
     }
 
     //chooses a random tree tile
-    private Tile TreeSelection()
+    public static Tile TreeSelection()
     {
         int randValue = rand.Next(1, 3);
         return randValue switch
@@ -338,7 +336,7 @@ public class testtilemap : MonoBehaviour
     }
 
     //chooses a random plant tile
-    private Tile PlantSelection()
+    public static Tile PlantSelection()
     {
         int randValue = rand.Next(1, 3);
         return randValue switch
