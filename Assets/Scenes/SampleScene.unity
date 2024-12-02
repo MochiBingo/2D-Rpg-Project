@@ -1306,6 +1306,7 @@ MonoBehaviour:
   WaterMiddle: {fileID: 11400000, guid: 477586d29018f7d41a3b90a9acf2893a, type: 2}
   Player: {fileID: 11400000, guid: a95e2fdd5a6c10b4bb3ef01e957663db, type: 2}
   finish: {fileID: 11400000, guid: b3aad19bb6242934b90b66ad69dedd8c, type: 2}
+  enemy: {fileID: 11400000, guid: 29576ad3785ae3d49b76148af145b9e2, type: 2}
   ui: {fileID: 12326339}
   winText: {fileID: 1184404315}
   dieText: {fileID: 0}
