@@ -9,17 +9,37 @@ using System.Numerics;
 
 public class moveEnemy : MonoBehaviour
 {
-    public static Tile enemy;
-    private int enemyX = testtilemap.columns - 2;
-    private int enemyY = testtilemap.rows - 2;
+    public static int enemyX = 40;
+    public static int enemyY = 20;
     public static string[] mapData;
-
-    private void Update()
+    private void Start()
     {
         UpdateEnemyTile();
+
+    }
+    private void Update()
+    {
+        
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            TryMoveEnemy(0, 1);
+        }
+        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            TryMoveEnemy(0, -1);
+        }
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            TryMoveEnemy(1, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            TryMoveEnemy(-1, 0);
+        }
     }
     private void checkDistance()
     {
+
     }
 
     void TryMoveEnemy(int dx, int dy)
@@ -27,10 +47,10 @@ public class moveEnemy : MonoBehaviour
         int newX = enemyX + dx;
         int newY = enemyY + dy;
 
-        if (IsPositionValid(newX, newY))
+        if (testtilemap.instance.IsPositionValid(newX, newY))
         {
             Vector3Int oldPosition = new Vector3Int(enemyX, -enemyY, 0);
-            testtilemap.myTilemap.SetTile(oldPosition, testtilemap.GetTileForCharacter(mapData[enemyY][enemyX]));
+            testtilemap.instance.myTilemap.SetTile(oldPosition, testtilemap.instance.GetTileForCharacter(mapData[enemyY][enemyX]));
 
             enemyX = newX;
             enemyY = newY;
@@ -39,22 +59,14 @@ public class moveEnemy : MonoBehaviour
     }
     void UpdateEnemyTile()
     {
-        Vector3Int position = new Vector3Int(enemyX, -enemyY, 0);
-        if (testtilemap.myTilemap.GetTile(position) == testtilemap.Player)
+
+        Vector3Int enemyposition = new Vector3Int(enemyX, -enemyY, 0);
+        if (testtilemap.instance.myTilemap.GetTile(enemyposition) == testtilemap.instance.Player)
         {
-            testtilemap.dieText.SetActive(true);
+            testtilemap.instance.dieText.SetActive(true);
         }
-        testtilemap.myTilemap.SetTile(position, enemy);
+        testtilemap.instance.myTilemap.SetTile(enemyposition, testtilemap.instance.enemy);
 
     }
 
-    bool IsPositionValid(int x, int y)
-    {
-        if (x < 0 || x >= testtilemap.columns || y < 0 || y >= testtilemap.rows)
-        {
-            return false;
-        }
-        char tileAtPositon = mapData[y][x];
-        return tileAtPositon != 'O' && tileAtPositon != 'W' && tileAtPositon != 'H' && tileAtPositon != 'P' && tileAtPositon != 'T' && tileAtPositon != '+' && tileAtPositon != '~' && tileAtPositon != '=' && tileAtPositon != '[' && tileAtPositon != ']' && tileAtPositon != '_' && tileAtPositon != '-' && tileAtPositon != '!' && tileAtPositon != 'p';
-    }
 }

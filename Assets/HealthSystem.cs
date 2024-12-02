@@ -19,7 +19,7 @@ public class HealthSystem : MonoBehaviour
             // Implement damage logic
             if (health <= 0)
             {
-                testtilemap.dieText.SetActive(true);
+                testtilemap.instance.dieText.SetActive(true);
             }
         }
         if (health > 100)
