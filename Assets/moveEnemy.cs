@@ -12,6 +12,7 @@ public class moveEnemy : MonoBehaviour
     public static moveEnemy instance;
     public int enemyX = 40;
     public int enemyY = 20;
+    public bool isPlayerTurn = true;
     private void Awake()
     {
         instance = this;
@@ -22,26 +23,40 @@ public class moveEnemy : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        if (isPlayerTurn == false)
         {
-            TryMoveEnemy(0, 1);
-        }
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            TryMoveEnemy(0, -1);
-        }
-        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            TryMoveEnemy(1, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            TryMoveEnemy(-1, 0);
+            enemyAI();
         }
     }
-    private void checkDistance()
+    private void enemyAI()
     {
+        int playerX = testtilemap.instance.playerX;
+        int playerY = testtilemap.instance.playerY;
 
+        int dx = 0;
+        int dy = 0;
+
+        if (enemyX < playerX)
+        {
+            dx = 1; 
+        }
+        else if (enemyX > playerX)
+        {
+            dx = -1; 
+        }
+
+        if (enemyY < playerY)
+        {
+            dy = 1;
+        }
+        else if (enemyY > playerY)
+        {
+            dy = -1;
+        }
+
+        TryMoveEnemy(dx, dy);
+
+        isPlayerTurn = true;
     }
 
     void TryMoveEnemy(int dx, int dy)
@@ -49,7 +64,7 @@ public class moveEnemy : MonoBehaviour
         int newX = enemyX + dx;
         int newY = enemyY + dy;
 
-        if (testtilemap.instance.IsPositionValid(newX, newY))
+        if (IsEnemyPositionValid(newX, newY))
         {
             Vector3Int oldPosition = new Vector3Int(enemyX, -enemyY, 0);
             testtilemap.instance.myTilemap.SetTile(oldPosition, testtilemap.instance.GetTileForCharacter(testtilemap.instance.mapData[enemyY][enemyX]));
@@ -59,14 +74,23 @@ public class moveEnemy : MonoBehaviour
             UpdateEnemyTile();
         }
     }
+    public bool IsEnemyPositionValid(int x, int y)
+    {
+        if (x < 0 || x >= testtilemap.instance.columns || y < 0 || y >= testtilemap.instance.rows)
+        {
+            return false;
+        }
+
+        char tileAtPositon = testtilemap.instance.mapData[y][x];
+        return tileAtPositon != 'O' && tileAtPositon != 'W' && tileAtPositon != 'H' && tileAtPositon != 'P' && tileAtPositon != 'T' && tileAtPositon != '+' && tileAtPositon != '~' && tileAtPositon != '=' && tileAtPositon != '[' && tileAtPositon != ']' && tileAtPositon != '_' && tileAtPositon != '-' && tileAtPositon != '!';
+    }
     void UpdateEnemyTile()
     {
 
         Vector3Int enemyposition = new Vector3Int(enemyX, -enemyY, 0);
-        if (testtilemap.instance.myTilemap.GetTile(enemyposition) == testtilemap.instance.Player)
+        if (testtilemap.instance.myTilemap.GetTile(enemyposition) == testtilemap.instance.Player && isPlayerTurn == false)
         {
-            testtilemap.instance.dieText.SetActive(true);
-            testtilemap.instance.gameActive = false;
+            HealthSystem.health = HealthSystem.health - 20;
         }
         testtilemap.instance.myTilemap.SetTile(enemyposition, testtilemap.instance.enemy);
 

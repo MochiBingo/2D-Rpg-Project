@@ -83,21 +83,28 @@ public class testtilemap : MonoBehaviour
     void Update()
     {
         ui.text = "Health: " + HealthSystem.health + " | Status: " + HealthSystem.healthStatus;
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        if (moveEnemy.instance.isPlayerTurn == true)
         {
-            TryMovePlayer(0, -1);
-        }
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            TryMovePlayer(0, 1);
-        }
-        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            TryMovePlayer(-1, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            TryMovePlayer(1, 0);
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                TryMovePlayer(0, -1);
+            }
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                TryMovePlayer(0, 1);
+            }
+            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                TryMovePlayer(-1, 0);
+            }
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                TryMovePlayer(1, 0);
+            }
+            if (Input.anyKeyDown)
+            {
+                moveEnemy.instance.isPlayerTurn = false;
+            }
         }
     }
 

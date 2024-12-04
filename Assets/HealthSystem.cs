@@ -20,6 +20,7 @@ public class HealthSystem : MonoBehaviour
             if (health <= 0)
             {
                 testtilemap.instance.dieText.SetActive(true);
+                testtilemap.instance.gameActive = false;
             }
         }
         if (health > 100)

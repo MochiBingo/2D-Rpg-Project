@@ -1253,6 +1253,7 @@ GameObject:
   - component: {fileID: 1537055573}
   - component: {fileID: 1537055572}
   - component: {fileID: 1537055571}
+  - component: {fileID: 1537055574}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -1308,8 +1309,14 @@ MonoBehaviour:
   finish: {fileID: 11400000, guid: b3aad19bb6242934b90b66ad69dedd8c, type: 2}
   enemy: {fileID: 11400000, guid: 29576ad3785ae3d49b76148af145b9e2, type: 2}
   ui: {fileID: 12326339}
+  columns: 45
+  rows: 25
+  playerX: 1
+  playerY: 1
+  mapData: []
   winText: {fileID: 1184404315}
-  dieText: {fileID: 0}
+  dieText: {fileID: 1326490804}
+  gameActive: 0
 --- !u!483693784 &1537055572
 TilemapRenderer:
   m_ObjectHideFlags: 0
@@ -1425,6 +1432,20 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &1537055574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537055569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc9bec4171bc995469449b7805c64c37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyX: 40
+  enemyY: 20
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
