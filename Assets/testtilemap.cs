@@ -41,14 +41,15 @@ public class testtilemap : MonoBehaviour
     public Tile finish;
     public Tile enemy;
     public TextMeshProUGUI ui;
-    public static System.Random rand = new System.Random();
-    public static int columns = 45;
-    public static int rows = 25;
-    public static int playerX = 1;
-    public static int playerY = 1;
-    private string[] mapData;
+    public System.Random rand = new System.Random();
+    public int columns = 45;
+    public int rows = 25;
+    public int playerX = 1;
+    public int playerY = 1;
+    public string[] mapData;
     public GameObject winText;
     public GameObject dieText;
+    public bool gameActive = true;
 
 
     //Legend:
@@ -76,7 +77,7 @@ public class testtilemap : MonoBehaviour
         ConvertMapToTilemap(mapData);
         UpdatePlayerTile();
     }
-    
+
 
     //movement handler
     void Update()
@@ -124,6 +125,7 @@ public class testtilemap : MonoBehaviour
         if (myTilemap.GetTile(position) == finish)
         {
             winText.SetActive(true);
+            gameActive = false;
         }
         myTilemap.SetTile(position, Player);
 
@@ -296,7 +298,7 @@ public class testtilemap : MonoBehaviour
                 {
                     continue;
                 }
-                if (x == moveEnemy.enemyX && y == moveEnemy.enemyY)
+                if (x == moveEnemy.instance.enemyX && y == moveEnemy.instance.enemyY)
                 {
                     continue;
                 }

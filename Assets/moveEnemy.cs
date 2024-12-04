@@ -9,17 +9,19 @@ using System.Numerics;
 
 public class moveEnemy : MonoBehaviour
 {
-    public static int enemyX = 40;
-    public static int enemyY = 20;
-    public static string[] mapData;
+    public static moveEnemy instance;
+    public int enemyX = 40;
+    public int enemyY = 20;
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
         UpdateEnemyTile();
-
     }
     private void Update()
     {
-        
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             TryMoveEnemy(0, 1);
@@ -50,7 +52,7 @@ public class moveEnemy : MonoBehaviour
         if (testtilemap.instance.IsPositionValid(newX, newY))
         {
             Vector3Int oldPosition = new Vector3Int(enemyX, -enemyY, 0);
-            testtilemap.instance.myTilemap.SetTile(oldPosition, testtilemap.instance.GetTileForCharacter(mapData[enemyY][enemyX]));
+            testtilemap.instance.myTilemap.SetTile(oldPosition, testtilemap.instance.GetTileForCharacter(testtilemap.instance.mapData[enemyY][enemyX]));
 
             enemyX = newX;
             enemyY = newY;
@@ -64,6 +66,7 @@ public class moveEnemy : MonoBehaviour
         if (testtilemap.instance.myTilemap.GetTile(enemyposition) == testtilemap.instance.Player)
         {
             testtilemap.instance.dieText.SetActive(true);
+            testtilemap.instance.gameActive = false;
         }
         testtilemap.instance.myTilemap.SetTile(enemyposition, testtilemap.instance.enemy);
 
