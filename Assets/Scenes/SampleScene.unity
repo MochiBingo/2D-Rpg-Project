@@ -681,7 +681,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1446,6 +1446,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyX: 40
   enemyY: 20
+  isPlayerTurn: 1
+  enemyAlive: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
