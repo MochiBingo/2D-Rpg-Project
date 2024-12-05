@@ -49,7 +49,7 @@ public class testtilemap : MonoBehaviour
     public string[] mapData;
     public GameObject winText;
     public GameObject dieText;
-    public bool gameActive = true;
+    public bool gameActive;
 
 
     //Legend:
@@ -76,6 +76,7 @@ public class testtilemap : MonoBehaviour
         mapData = GenerateMapString(columns, rows);
         ConvertMapToTilemap(mapData);
         UpdatePlayerTile();
+        gameActive = true;
     }
 
 
@@ -83,7 +84,7 @@ public class testtilemap : MonoBehaviour
     void Update()
     {
         ui.text = "Health: " + HealthSystem.health + " | Status: " + HealthSystem.healthStatus;
-        if (moveEnemy.instance.isPlayerTurn == true)
+        if (moveEnemy.instance.isPlayerTurn == true && gameActive == true)
         {
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -134,7 +135,11 @@ public class testtilemap : MonoBehaviour
             winText.SetActive(true);
             gameActive = false;
         }
-        myTilemap.SetTile(position, Player);
+        else if (myTilemap.GetTile(position) == enemy && moveEnemy.instance.isPlayerTurn == true)
+        {
+            moveEnemy.instance.enemyAlive = false;
+        }
+            myTilemap.SetTile(position, Player);
 
     }
 

@@ -6,6 +6,7 @@ using static UnityEngine.Rendering.DebugUI.Table;
 using UnityEngine.UIElements;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using System.Numerics;
+using UnityEngine.InputSystem.Android;
 
 public class moveEnemy : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class moveEnemy : MonoBehaviour
     public int enemyX = 40;
     public int enemyY = 20;
     public bool isPlayerTurn = true;
+    public bool enemyAlive;
+    public System.Random rand = new System.Random();
+
     private void Awake()
     {
         instance = this;
@@ -20,12 +24,21 @@ public class moveEnemy : MonoBehaviour
     private void Start()
     {
         UpdateEnemyTile();
+        enemyAlive = true;
     }
     private void Update()
     {
-        if (isPlayerTurn == false)
+        if (isPlayerTurn == false && testtilemap.instance.gameActive == true)
         {
-            enemyAI();
+            if (enemyAlive == true)
+            {
+                enemyAI();
+            }
+            else
+            {
+                isPlayerTurn = true;
+            }
+            
         }
     }
     private void enemyAI()
@@ -84,16 +97,18 @@ public class moveEnemy : MonoBehaviour
         char tileAtPositon = testtilemap.instance.mapData[y][x];
         return tileAtPositon != 'O' && tileAtPositon != 'W' && tileAtPositon != 'H' && tileAtPositon != 'P' && tileAtPositon != 'T' && tileAtPositon != '+' && tileAtPositon != '~' && tileAtPositon != '=' && tileAtPositon != '[' && tileAtPositon != ']' && tileAtPositon != '_' && tileAtPositon != '-' && tileAtPositon != '!';
     }
-    void UpdateEnemyTile()
+    public void UpdateEnemyTile()
     {
 
         Vector3Int enemyposition = new Vector3Int(enemyX, -enemyY, 0);
         if (testtilemap.instance.myTilemap.GetTile(enemyposition) == testtilemap.instance.Player && isPlayerTurn == false)
         {
-            HealthSystem.health = HealthSystem.health - 20;
+            HealthSystem.TakeDamage(20);
+            enemyY = enemyY + (rand.Next(1, 8) - rand.Next(1, 4));
+            enemyX = enemyX + (rand.Next(1, 8) - rand.Next(1, 4));
+            testtilemap.instance.myTilemap.SetTile(enemyposition, testtilemap.instance.enemy);
         }
         testtilemap.instance.myTilemap.SetTile(enemyposition, testtilemap.instance.enemy);
-
     }
 
 }
